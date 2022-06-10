@@ -4,18 +4,13 @@ import "./style/style.scss";
 import lena from "./img/lena.jpg";
 
 function createHTMLStructure() {
-    const img_src = createHTMLElement('img', '', {id: 'img-src', src: lena});
+    const img_src = createHTMLElement('img', '', {id: 'img-src'});
     const img_upload = createHTMLElement('input', '', {id: 'img-upload', type: 'file'});
-
     const ascii_art_showcase = createHTMLElement('div', '', {id: 'ascii-art-showcase'});
 
     document.body.appendChild(img_src);
     document.body.appendChild(img_upload);
     document.body.appendChild(ascii_art_showcase);
-
-    // const canvas_showcase = createHTMLElement('canvas', '', {id: 'canvas_showcase'});
-    // document.body.appendChild(canvas_showcase);
-
 }
 
 function updateASCIIArt(img) {
@@ -60,15 +55,29 @@ function setup() {
     }, false);
 
     // when new image shows, get ascii
-    img_src.onload = () => {
+    img_src.addEventListener('load', (e) => {
         updateASCIIArt(img_src);
-    }
+    });
+
+    // initial stock photo
+    img_src.src = lena;
 }
 
 function main() {
     window.addEventListener('load', () => {
+        // init structure
         createHTMLStructure();
-        setup();
+        
+        // include opencv
+        const opencvScript = createHTMLElement('script', '', {src: 'https://docs.opencv.org/4.5.0/opencv.js', async: true});
+        document.head.appendChild(opencvScript);
+        opencvScript.addEventListener('load', () => {
+            if (cv.getBuildInformation) {
+                setup();
+            } else {
+                cv['onRuntimeInitialized']=setup;              
+            }
+        });
     })
 }
 

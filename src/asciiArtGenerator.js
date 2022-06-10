@@ -1,5 +1,9 @@
-import cv from './opencv';
+import { createHTMLElement } from './utilities';
 
+// NOTE: needs to require opencv.js
+// https://docs.opencv.org/4.5.0/opencv.js
+
+// console.log(cvFile);
 export function aag(img, width) {
     // constants
     const ASCIIStr = [
@@ -17,17 +21,20 @@ export function aag(img, width) {
 
     // calc new size
     const dstWidth = width;                                          // requested width
-    const dstHeight = Math.floor(srcRatio * dstWidth * 0.5);          // width of the font ~= 0.5 * height of the font
+    const dstHeight = Math.floor(srcRatio * dstWidth * 0.55);          // width of the font ~= 0.5 * height of the font
 
     // resize image
     const dstSize = new cv.Size(dstWidth, dstHeight);
     const dst = new cv.Mat();
     cv.resize(src, dst, dstSize,0,0,cv.INTER_AREA);
 
-    // cv.imshow('canvas_showcase', dst);
+    // get grayscale image
+    const dstGray = new cv.Mat();
+    cv.cvtColor(dst, dstGray, cv.COLOR_RGBA2GRAY, 0);
+    cv.equalizeHist(dstGray, dstGray);
 
     // generating ASCII Art
-    if (dst.isContinuous()) {
+    if (dst.isContinuous() && dstGray.isContinuous()) {
         for (let row = 0; row < dst.rows; row++) {
             const resultRow = [];
             result.push(resultRow);
@@ -37,10 +44,10 @@ export function aag(img, width) {
                 const B = dst.data[row * dst.cols * dst.channels() + col * dst.channels() + 2];
                 const A = dst.data[row * dst.cols * dst.channels() + col * dst.channels() + 3];
                 
-                const brightness = Math.floor(0.299 * R + 0.587 * G + 0.114 * B);
-                
+                const brightness = dstGray.data[row * dstGray.cols * dstGray.channels() + col * dstGray.channels()];
+
                 resultRow.push({
-                    char: ASCIIStr[ASCIIStr.length -  Math.floor((brightness/255) * ASCIIStr.length)],
+                    char: ASCIIStr[(ASCIIStr.length - 1) -  Math.floor((brightness/255) * (ASCIIStr.length - 1))],
                     rgba: [R, G, B, A],
                 });
             }
@@ -50,6 +57,7 @@ export function aag(img, width) {
     // clean mem
     src.delete();
     dst.delete();
+    dstGray.delete();
 
     return result;
 }

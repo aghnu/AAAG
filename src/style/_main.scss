@@ -8,12 +8,15 @@
 
 #ascii-art-showcase {
     .row {
-        margin: -0.2em;
+        margin: -0.3em;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .char {
         display: inline-block;
-        height: 1em;
-        width: 0.625em;
+        height: 0.6em;
+        width: 0.6em;
+        font-family: "Classic Console Neue";
     }
 }
