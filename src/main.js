@@ -15,7 +15,7 @@ function createHTMLStructure() {
 
 function updateASCIIArt(img) {
     const ascii_art_showcase = document.getElementById('ascii-art-showcase');
-    const ASCIIArtArray = aag(img, 80);
+    const ASCIIArtArray = aag(img, 75);
 
     if (ASCIIArtArray.length !== 0) {
         // clear old art

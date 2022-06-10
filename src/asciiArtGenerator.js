@@ -4,13 +4,7 @@ import { createHTMLElement } from './utilities';
 // https://docs.opencv.org/4.5.0/opencv.js
 
 export function aag(img, width) {
-    // constants
-    const ASCIIStr = [
-        '@', '&', '%', 
-        '#', '(', '/', 
-        '*', ',', '.', 
-        '&nbsp'
-    ];
+    const ASCIIStr = "@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1zv7lciL/\\|?*>r^;:_\"~,'.-` ";
 
     const result = [];
 
@@ -44,10 +38,12 @@ export function aag(img, width) {
                 const A = dst.data[row * dst.cols * dst.channels() + col * dst.channels() + 3];
                 
                 const brightness = dstGray.data[row * dstGray.cols * dstGray.channels() + col * dstGray.channels()];
-
+                
+                const charOut = ASCIIStr[(ASCIIStr.length - 1) -  Math.floor((brightness/255) * (ASCIIStr.length - 1))];
+                const rgbaOut = [R, G, B, A]
                 resultRow.push({
-                    char: ASCIIStr[(ASCIIStr.length - 1) -  Math.floor((brightness/255) * (ASCIIStr.length - 1))],
-                    rgba: [R, G, B, A],
+                    char: charOut === ' ' ? '&nbsp' : charOut,
+                    rgba: rgbaOut,
                 });
             }
         }        
