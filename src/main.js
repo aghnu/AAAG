@@ -38,9 +38,6 @@ function updateASCIIArt(img) {
                 ASCIIArtRow.appendChild(ASCIIChar);
             });
         });   
-        
-        console.log(rowN);
-        console.log(colN);
     }
 
 }

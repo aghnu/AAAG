@@ -3,7 +3,6 @@ import { createHTMLElement } from './utilities';
 // NOTE: needs to require opencv.js
 // https://docs.opencv.org/4.5.0/opencv.js
 
-// console.log(cvFile);
 export function aag(img, width) {
     // constants
     const ASCIIStr = [
