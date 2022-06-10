@@ -1,0 +1,3 @@
+[submodule "src/js/gif_frames_extract_js"]
+	path = src/js/gif_frames_extract_js
+	url = git@github.com:aghnu/gif_frames_extract_js.git
