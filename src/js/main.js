@@ -1,7 +1,7 @@
 import { aag } from './asciiArtGenerator';
 import { createHTMLElement } from "./utilities";
-import "./style/style.scss";
-import lena from "./img/lena.jpg";
+import "../style/style.scss";
+import lena from "../img/lena.jpg";
 
 function createHTMLStructure() {
     const img_src = createHTMLElement('img', '', {id: 'img-src'});
