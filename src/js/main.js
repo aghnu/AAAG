@@ -33,11 +33,16 @@ function createHTMLStructure() {
     const ascii_art_showcase = createHTMLElement('div', '', {
         id: 'ascii-art-showcase'
     });
+    const page_loading_prompt = createHTMLElement('p', '', {
+        id: 'loading-prompt'
+    });
 
     const footer = createHTMLElement('footer', '', {id: 'site-footer'});
     const footer_info = createHTMLElement('p', 'Aghnu\'s ASCII Art Generator<br>by Gengyuan Huang', {class: 'info'});
 
     footer.appendChild(footer_info);
+
+    ascii_art_showcase.appendChild(page_loading_prompt);
 
     img_upload.appendChild(img_upload_prompt);
     img_upload.appendChild(img_upload_input);
@@ -241,16 +246,37 @@ function main() {
 
         // include opencv
         const opencvScript = createHTMLElement('script', '', {
-            src: 'https://docs.opencv.org/4.5.0/opencv.js',
+            src: 'https://www.aghnu.me/static/js/opencv.js',
+            // src: 'https://docs.opencv.org/4.5.0/opencv.js',
             async: true
         });
+
+        const loading_prompt = document.querySelector('#loading-prompt');
+        const loading_prompt_str = [
+            'Webpage is loading',
+            'Webpage is loading.',
+            'Webpage is loading..',
+            'Webpage is loading...',
+        ]
+        let timeInterval;
+        let str_idx = 0;
+
+        timeInterval = setInterval(() => {
+            loading_prompt.innerHTML = loading_prompt_str[str_idx];
+            str_idx = (str_idx + 1) % loading_prompt_str.length;
+        }, 500);
+
         document.head.appendChild(opencvScript);
         opencvScript.addEventListener('load', () => {
-            if (cv.getBuildInformation) {
-                setup();
-            } else {
-                cv['onRuntimeInitialized'] = setup;
-            }
+            setTimeout(() => {
+                clearInterval(timeInterval);
+                loading_prompt.style.display = 'none';
+                if (cv.getBuildInformation) {
+                    setup();
+                } else {
+                    cv['onRuntimeInitialized'] = setup;
+                }
+            }, loading_prompt_str.length * 500);
         });
     })
 }
