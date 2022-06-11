@@ -7,13 +7,14 @@ import "../style/style.scss";
 // webpack load stock photos
 import stock_0 from "../img/stock_demo/0.gif";
 import stock_1 from "../img/stock_demo/1.gif";
+import stock_2 from "../img/stock_demo/2.gif";
 
 // globals
 const img_temp = createHTMLElement('img', '', {
     id: 'img-temp'
 });
 const stock_photos = [
-    stock_0, stock_1
+    stock_0, stock_1, stock_2
 ]
 const OUT_HEIGHT = 35;
 
@@ -153,8 +154,10 @@ function updateASCIIArtGifRealTime(gifURL) {
                 // frame havent been all generated and is the end of the loop
                 // repeat the current frame untill frames are all generated or new frame is generated
                 frameIdx = currentIdx;
+                timeout = setTimeout(playFrame, 50);       // buffer time -> 0.05s;
+            } else {
+                timeout = setTimeout(playFrame, framesDOMElements[currentIdx][1]);
             }
-            timeout = setTimeout(playFrame, framesDOMElements[currentIdx][1]);
         };
     }
     
