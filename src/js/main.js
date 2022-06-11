@@ -230,7 +230,6 @@ function setup() {
         img_temp.src = stock_url;
     } else if (extGif.exec(stock_url)) {
         clearup();
-        img_temp.src = stock_url;
         clearupFunc = updateASCIIArtGif(stock_url);
     }
 }
