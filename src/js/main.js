@@ -20,25 +20,14 @@ const OUT_HEIGHT = 35;
 
 function createHTMLStructure() {
 
-    const img_upload = createHTMLElement('label', '', {
-        id: 'img-upload'
-    });
-    const img_upload_input = createHTMLElement('input', '', {
-        class: 'upload',
-        type: 'file'
-    });
-    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF', {
-        class: 'prompt'
-    })
-    const ascii_art_showcase = createHTMLElement('div', '', {
-        id: 'ascii-art-showcase'
-    });
-    const page_loading_prompt = createHTMLElement('p', '', {
-        id: 'loading-prompt'
-    });
+    const img_upload = createHTMLElement('label', '', {id: 'img-upload'});
+    const img_upload_input = createHTMLElement('input', '', {class: 'upload', type: 'file'});
+    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF', {class: 'prompt'});
+    const ascii_art_showcase = createHTMLElement('div', '', {id: 'ascii-art-showcase'});
+    const page_loading_prompt = createHTMLElement('p', '', {id: 'loading-prompt'});
 
     const footer = createHTMLElement('footer', '', {id: 'site-footer'});
-    const footer_info = createHTMLElement('p', 'Aghnu\'s ASCII Art Generator<br>by Gengyuan Huang', {class: 'info'});
+    const footer_info = createHTMLElement('p', 'Aghnu\'s ASCII Art Generator<br>by Gengyuan Huang<br><a target="_blank" href="https://www.aghnu.me">© 2022 AGHNU.ME</a>', {class: 'info'});
 
     footer.appendChild(footer_info);
 
