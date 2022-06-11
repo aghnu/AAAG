@@ -3,18 +3,23 @@ import { createHTMLElement } from './utilities';
 // NOTE: needs to require opencv.js
 // https://docs.opencv.org/4.5.0/opencv.js
 
-export function aag(img, width, isImageData=false) {
+export function aag(img, size, isImageData=false) {
     const ASCIIStr = "@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1zv7lciL/\\|?*>r^;:_\"~,'.-` ";
 
     const result = [];
 
     // load image
     const src = (isImageData) ? cv.matFromImageData(img) : cv.imread(img);
-    const srcRatio = src.rows / src.cols;
+    const srcRatio =  src.cols / src.rows;
+
+    // // calc new size
+    // const dstWidth = width;                                          // requested width
+    // const dstHeight = Math.floor(srcRatio * dstWidth * 0.55);          // width of the font ~= 0.5 * height of the font
 
     // calc new size
-    const dstWidth = width;                                          // requested width
-    const dstHeight = Math.floor(srcRatio * dstWidth * 0.55);          // width of the font ~= 0.5 * height of the font
+    const dstHeight = size;                                          // requested width
+    const dstWidth = Math.floor(srcRatio * dstHeight * 1.8);          // width of the font ~= 0.5 * height of the font
+
 
     // resize image
     const dstSize = new cv.Size(dstWidth, dstHeight);

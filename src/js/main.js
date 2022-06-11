@@ -1,35 +1,50 @@
-import {
-    aag
-} from './asciiArtGenerator';
-import {
-    createHTMLElement
-} from "./utilities";
+import { aag } from './asciiArtGenerator';
+import { createHTMLElement } from "./utilities";
 import GFE from "./gif_frames_extract_js/GFE";
 
 import "../style/style.scss";
-import lena from "../img/lena.jpg";
 
+// webpack load stock photos
+import stock_0 from "../img/stock_demo/0.gif";
+import stock_1 from "../img/stock_demo/1.gif";
 
 // globals
 const img_temp = createHTMLElement('img', '', {
     id: 'img-temp'
 });
+const stock_photos = [
+    stock_0, stock_1
+]
 
 function createHTMLStructure() {
-    const img_upload = createHTMLElement('input', '', {
-        id: 'img-upload',
+
+    const img_upload = createHTMLElement('label', '', {
+        id: 'img-upload'
+    });
+    const img_upload_input = createHTMLElement('input', '', {
+        class: 'upload',
         type: 'file'
     });
+    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG | PNG | GIF', {
+        class: 'prompt'
+    })
     const ascii_art_showcase = createHTMLElement('div', '', {
         id: 'ascii-art-showcase'
     });
 
-    document.body.appendChild(img_upload);
+    const footer = createHTMLElement('footer', '', {id: 'site-footer'});
+    const footer_info = createHTMLElement('p', 'Aghnu\'s ASCII Art Generator<br>by Gengyuan Huang', {class: 'info'});
+
+    footer.appendChild(footer_info);
+
+    img_upload.appendChild(img_upload_prompt);
+    img_upload.appendChild(img_upload_input);
+
+    // append to body
     document.body.appendChild(ascii_art_showcase);
-}
-
-function fileValidation(inputEl) {
-
+    document.body.appendChild(img_upload);
+    document.body.appendChild(footer);
+    
 }
 
 function updateShowcaseContainer(artArray) {
@@ -63,7 +78,7 @@ function updateShowcaseContainer(artArray) {
 
 function updateASCIIArt(img) {
     const ascii_art_showcase = document.getElementById('ascii-art-showcase');
-    const ASCIIArtArray = aag(img, 75);
+    const ASCIIArtArray = aag(img, 35);
 
     if (ASCIIArtArray.length !== 0) {
         // clear old art
@@ -74,46 +89,69 @@ function updateASCIIArt(img) {
 
 function updateASCIIArtGif(gifURL) {
     const ascii_art_showcase = document.getElementById('ascii-art-showcase');
+    let timeout = null;
+    let play = true;
 
     GFE(gifURL, (frames) => {
         const frameLen = frames.length;
         let frameIdx = 0;
 
+        // pre-render frames to improve performance
+        const framesDOMElements = [];
+        frames.forEach((fr)=>{
+            const ASCIIArtArray = aag(fr.data, 35, true);
+            framesDOMElements.push([updateShowcaseContainer(ASCIIArtArray), fr.delay * 10]);
+        });
+
+        // play
         const playFrame = () => {
             const currentIdx = frameIdx;
-            const ASCIIArtArray = aag(frames[currentIdx].data, 100, true);
-            if (ASCIIArtArray.length !== 0) {
-                // clear old art
-                ascii_art_showcase.innerHTML = '';
-                ascii_art_showcase.appendChild(updateShowcaseContainer(ASCIIArtArray));
-            }
+            ascii_art_showcase.innerHTML = '';
+            ascii_art_showcase.appendChild(framesDOMElements[currentIdx][0]);
             
-            frameIdx = (frameIdx + 1) % frameLen;
-            setTimeout(playFrame, frames[currentIdx].delay * 10);
+            if (play) {
+                frameIdx = (frameIdx + 1) % frameLen;
+                timeout = setTimeout(playFrame, framesDOMElements[currentIdx][1]);
+            };
         }
 
         playFrame();
     });
+
+    return () => {
+        // stop function
+        play = false;
+        clearTimeout(timeout);
+    }
 }
 
 function setup() {
-    const img_upload = document.getElementById("img-upload");
+    const img_upload = document.querySelector("#img-upload .upload");
+    const extImg = /(\.jpg|\.jpeg|\.png)$/i;
+    const extGif = /(\.gif)$/i;
+    
+    let clearupFunc = null;
+    const clearup = () => {
+        if (clearupFunc) {
+            clearupFunc();
+        }
+        clearupFunc = null;
+    }
 
     // upload image, display image
     img_upload.addEventListener("change", (e) => {
         const filePath = img_upload.value; 
-        const extImg = /(\.jpg|\.jpeg|\.png)$/i;
-        const extGif = /(\.gif)$/i;
+
 
         if (extImg.exec(filePath)) {
+            clearup();
             img_temp.src = URL.createObjectURL(e.target.files[0]);
         } else if (extGif.exec(filePath)) {
-            updateASCIIArtGif(URL.createObjectURL(e.target.files[0]));
+            clearup();
+            clearupFunc = updateASCIIArtGif(URL.createObjectURL(e.target.files[0]));
         } else {
             img_upload.value = '';
         }
-
-
 
     }, false);
 
@@ -123,7 +161,15 @@ function setup() {
     });
 
     // initial stock photo
-    img_temp.src = lena;
+    const stock_url = stock_photos[Math.floor(Math.random() * stock_photos.length)];
+    if (extImg.exec(stock_url)) {
+        clearup();
+        img_temp.src = stock_url;
+    } else if (extGif.exec(stock_url)) {
+        clearup();
+        img_temp.src = stock_url;
+        clearupFunc = updateASCIIArtGif(stock_url);
+    }
 }
 
 function main() {
