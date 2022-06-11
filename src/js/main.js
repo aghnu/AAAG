@@ -25,7 +25,7 @@ function createHTMLStructure() {
         class: 'upload',
         type: 'file'
     });
-    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG | PNG | GIF', {
+    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF', {
         class: 'prompt'
     })
     const ascii_art_showcase = createHTMLElement('div', '', {
