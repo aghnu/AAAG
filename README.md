@@ -3,10 +3,10 @@
 </p>
 
 
-# Aghnus_ASCII_Art_Generator
+# AGHNU'S ASCII ART JS TOOLKIT
 An ASCII Art Toolkit Website written in JavaScript, using opencv.js. Code is running on client side. It supports gif and static images convertion. The output is displayed as HTML elements and animated by JavaScript.
 
-# Results
+# RESULTS
 <p align="center">
 <img alt="static_demo_1" width="100%" src=https://user-images.githubusercontent.com/46549455/173167297-ce32c888-7a9a-492f-81fe-97b453414f59.png>
 </p>
@@ -14,9 +14,7 @@ An ASCII Art Toolkit Website written in JavaScript, using opencv.js. Code is run
 <img alt="static_demo_2" width="100%" src=https://user-images.githubusercontent.com/46549455/173167299-4da060b5-f00c-483c-996b-b0101824070a.png>
 </p>
 
-
-
-# License
+# LICENSE
 Copyright 2022 Gengyuan Huang
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +29,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-# Resources
+# RESOURCES
 - GFE - Shachaf Ben-Kiki, Gengyuan Huang (https://github.com/aghnu/gif_frames_extract_js)
 - OpenCV.js (https://docs.opencv.org/4.6.0/index.html)
 
