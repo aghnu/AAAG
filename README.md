@@ -32,7 +32,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 # Resources
-- GFE - Gengyuan Huang (https://github.com/aghnu/gif_frames_extract_js)
+- GFE - Shachaf Ben-Kiki, Gengyuan Huang (https://github.com/aghnu/gif_frames_extract_js)
 - OpenCV.js (https://docs.opencv.org/4.6.0/index.html)
 
 
