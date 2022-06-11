@@ -15,6 +15,7 @@ const img_temp = createHTMLElement('img', '', {
 const stock_photos = [
     stock_0, stock_1
 ]
+const OUT_HEIGHT = 35;
 
 function createHTMLStructure() {
 
@@ -78,7 +79,7 @@ function updateShowcaseContainer(artArray) {
 
 function updateASCIIArt(img) {
     const ascii_art_showcase = document.getElementById('ascii-art-showcase');
-    const ASCIIArtArray = aag(img, 35);
+    const ASCIIArtArray = aag(img, OUT_HEIGHT);
 
     if (ASCIIArtArray.length !== 0) {
         // clear old art
@@ -87,7 +88,15 @@ function updateASCIIArt(img) {
     }
 }
 
-function updateASCIIArtGif(gifURL) {
+function updateASCIIArtGif(gifURL, realTime=true) {
+    if (realTime) {
+        return updateASCIIArtGifRealTime(gifURL);
+    } else {
+        return updateASCIIArtGifPreRender(gifURL);
+    }
+}
+
+function updateASCIIArtGifPreRender(gifURL) {
     const ascii_art_showcase = document.getElementById('ascii-art-showcase');
     let timeout = null;
     let play = true;
@@ -99,7 +108,7 @@ function updateASCIIArtGif(gifURL) {
         // pre-render frames to improve performance
         const framesDOMElements = [];
         frames.forEach((fr)=>{
-            const ASCIIArtArray = aag(fr.data, 35, true);
+            const ASCIIArtArray = aag(fr.data, OUT_HEIGHT, true);
             framesDOMElements.push([updateShowcaseContainer(ASCIIArtArray), fr.delay * 10]);
         });
 
@@ -116,6 +125,57 @@ function updateASCIIArtGif(gifURL) {
         }
 
         playFrame();
+    });
+
+    return () => {
+        // stop function
+        play = false;
+        clearTimeout(timeout);
+    }
+}
+
+function updateASCIIArtGifRealTime(gifURL) {
+    const ascii_art_showcase = document.getElementById('ascii-art-showcase');
+    let timeout = null;
+    let play = true;
+    let framesAreGenerated = false;
+    let frameIdx = 0;
+    const framesDOMElements = [];
+
+    const playFrame = () => {
+        const currentIdx = frameIdx;
+        ascii_art_showcase.innerHTML = '';
+        ascii_art_showcase.appendChild(framesDOMElements[currentIdx][0]);
+        
+        if (play) {
+            frameIdx = (frameIdx + 1) % framesDOMElements.length;
+            if ((!framesAreGenerated) && frameIdx === 0) {
+                // frame havent been all generated and is the end of the loop
+                // repeat the current frame untill frames are all generated or new frame is generated
+                frameIdx = currentIdx;
+            }
+            timeout = setTimeout(playFrame, framesDOMElements[currentIdx][1]);
+        };
+    }
+    
+    GFE(gifURL, (fs)=>{framesAreGenerated = true}, (f) => {
+        // callback after each frame is generated
+        if (play) {
+            new Promise(()=>{
+                const ASCIIArtArray = aag(f.data, OUT_HEIGHT, true);
+                const DOMElements = updateShowcaseContainer(ASCIIArtArray);
+
+                if (framesDOMElements.length === 0) {
+                    // if this is the first frame, after frame is generated
+                    // start playing
+                    // frame will play loop as new frame generated
+                    framesDOMElements.push([DOMElements, f.delay * 10]);
+                    playFrame();
+                } else {
+                    framesDOMElements.push([DOMElements, f.delay * 10]);
+                }                     
+            });
+        }
     });
 
     return () => {
