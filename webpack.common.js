@@ -5,13 +5,13 @@ module.exports = {
     entry: './src/js/main.js',
     output: {
       filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'site/'),
+      path: path.resolve(__dirname, 'site/assets/'),
     },
 
     plugins: [
       new HtmlWebpackPlugin({
         title: "Aghnu's ASCII Art Generator",
-        filename: 'index.html'
+        filename: '../index.html'
       })
     ],
 
