@@ -4,7 +4,7 @@
     left: 50%;
     width: 92.5%;
     transform: translate(-50%, -50%);
-    height: 35em;
+    height: calc(35 * 1.8vh);
     overflow: hidden;
 
     #loading-prompt {
@@ -68,6 +68,7 @@
         transform: translate(-50%, -50%);
         font-family: "Classic Console Neue";
         white-space: nowrap;
+        line-height: 1em;
     }
     .upload {
         display: none;
@@ -84,5 +85,6 @@
         left: 50%;
         transform: translate(-50%, -50%);
         font-family: "Classic Console Neue";
+        line-height: 1.2em;
     }
 }
