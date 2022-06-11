@@ -4,7 +4,7 @@
 
 
 # Aghnus_ASCII_Art_Generator
-An ASCII Art Generator Website written in JavaScript, using opencv.js. Code is running on client side. It supports gif and static images convertion. The output is displayed as HTML elements and animated by JavaScript.
+An ASCII Art Toolkit Website written in JavaScript, using opencv.js. Code is running on client side. It supports gif and static images convertion. The output is displayed as HTML elements and animated by JavaScript.
 
 # Results
 <p align="center">
