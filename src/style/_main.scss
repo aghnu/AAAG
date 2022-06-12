@@ -4,7 +4,7 @@
     left: 50%;
     width: 92.5%;
     transform: translate(-50%, -50%);
-    height: calc(35 * 1.8vh);
+    height: calc(38 * 1.8vh);
     overflow: hidden;
 
     #loading-prompt {
@@ -52,9 +52,9 @@
 
 #img-upload {
     position: fixed;
-    top: 82.5%;
+    bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.7);
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 50%);
     height: 5vh;
     text-align: center;
     color: #ab9877;
@@ -82,10 +82,11 @@
         font-size: 0.75em;
         position: fixed;
         text-align: center;
-        top: 92.5%;
+        bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.3);
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, 50%);
         font-family: "Classic Console Neue";
-        line-height: 0.75em;
+        line-height: 0.85em;
+        white-space: nowrap;
     }
 }

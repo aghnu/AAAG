@@ -4,7 +4,8 @@ import { createHTMLElement } from './utilities';
 // https://docs.opencv.org/4.5.0/opencv.js
 
 export function aag(img, size, isImageData=false) {
-    const ASCIIStr = "@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1zv7lciL/\\|?*>r^;:_\"~,'.-` ";
+    const ASCIIStr = "@#QB&MN$%Ebao]{/|?*>;:^'`~-,. ";
+    // const ASCIIStr = "@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1zv7lciL/\\|?*>r^;:_\"~,'.-` ";
 
     const result = [];
 
