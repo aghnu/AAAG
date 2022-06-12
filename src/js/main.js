@@ -1,6 +1,7 @@
 import { aag } from './asciiArtGenerator';
 import { createHTMLElement } from "./utilities";
 import GFE from "./gif_frames_extract_js/GFE";
+import VFE from "./VFE";
 
 import "../style/style.scss";
 
@@ -10,19 +11,20 @@ import stock_1 from "../img/stock_demo/1.gif";
 import stock_2 from "../img/stock_demo/2.gif";
 
 // globals
-const img_temp = createHTMLElement('img', '', {
-    id: 'img-temp'
-});
+const img_temp = createHTMLElement('img', '');
+const vid_temp = createHTMLElement('video', '');
+
 const stock_photos = [
     stock_0, stock_1, stock_2
 ]
+
 const OUT_HEIGHT = 35;
 
 function createHTMLStructure() {
 
     const img_upload = createHTMLElement('label', '', {id: 'img-upload'});
     const img_upload_input = createHTMLElement('input', '', {class: 'upload', type: 'file'});
-    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF', {class: 'prompt'});
+    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF \\ MP4', {class: 'prompt'});
     const ascii_art_showcase = createHTMLElement('div', '', {id: 'ascii-art-showcase'});
     const page_loading_prompt = createHTMLElement('p', '', {id: 'loading-prompt'});
 
@@ -40,7 +42,6 @@ function createHTMLStructure() {
     document.body.appendChild(ascii_art_showcase);
     document.body.appendChild(img_upload);
     document.body.appendChild(footer);
-    
 }
 
 function updateShowcaseContainer(artArray) {
@@ -182,10 +183,32 @@ function updateASCIIArtGifRealTime(gifURL) {
     }
 }
 
+function updateASCIIArtVid(videoEl) {
+    const ascii_art_showcase = document.getElementById('ascii-art-showcase');
+    let videoEnd = false;
+    
+    const frameCallback = (frame) => {
+        const ASCIIArtArray = aag(frame.data, OUT_HEIGHT, true);
+        if (ASCIIArtArray.length !== 0) {
+            // clear old art
+            ascii_art_showcase.innerHTML = '';
+            ascii_art_showcase.appendChild(updateShowcaseContainer(ASCIIArtArray));
+        }
+    };
+
+    const endConditionCheckFunc = () => {
+        return videoEnd;
+    };
+
+
+    VFE(videoEl, 5, frameCallback, endConditionCheckFunc);
+}
+
 function setup() {
     const img_upload = document.querySelector("#img-upload .upload");
     const extImg = /(\.jpg|\.jpeg|\.png)$/i;
     const extGif = /(\.gif)$/i;
+    const extVid = /(\.mp4)$/i;
     
     let clearupFunc = null;
     const clearup = () => {
@@ -195,21 +218,26 @@ function setup() {
         clearupFunc = null;
     }
 
-    // upload image, display image
-    img_upload.addEventListener("change", (e) => {
-        const filePath = img_upload.value; 
-
-
+    const produceOut = (fileURL, filePath=fileURL) => {
         if (extImg.exec(filePath)) {
             clearup();
-            img_temp.src = URL.createObjectURL(e.target.files[0]);
+            img_temp.src = fileURL;
         } else if (extGif.exec(filePath)) {
             clearup();
-            clearupFunc = updateASCIIArtGif(URL.createObjectURL(e.target.files[0]));
+            clearupFunc = updateASCIIArtGif(fileURL);
+        } else if (extVid.exec(filePath)) {
+            clearup();
+            vid_temp.src = fileURL;
         } else {
             img_upload.value = '';
         }
+    }
 
+    // upload image, display image
+    img_upload.addEventListener("change", (e) => {
+        const filePath = img_upload.value; 
+        const fileURL =  URL.createObjectURL(e.target.files[0]);
+        produceOut(fileURL, filePath);
     }, false);
 
     // when new image shows, get ascii
@@ -217,15 +245,13 @@ function setup() {
         updateASCIIArt(img_temp);
     });
 
+    vid_temp.addEventListener('loadeddata', (e) => {
+        updateASCIIArtVid(vid_temp);
+    });
+
     // initial stock photo
     const stock_url = stock_photos[Math.floor(Math.random() * stock_photos.length)];
-    if (extImg.exec(stock_url)) {
-        clearup();
-        img_temp.src = stock_url;
-    } else if (extGif.exec(stock_url)) {
-        clearup();
-        clearupFunc = updateASCIIArtGif(stock_url);
-    }
+    produceOut(stock_url);
 }
 
 function main() {
