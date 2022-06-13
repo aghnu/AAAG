@@ -52,7 +52,7 @@
 
 #img-upload {
     position: fixed;
-    bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.7);
+    bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.6725);
     left: 50%;
     transform: translate(-50%, 50%);
     height: 5vh;
@@ -74,6 +74,18 @@
     .upload {
         display: none;
     }    
+}
+
+#input-prompt {
+    position: fixed;
+    top: calc((40% + (38 * 1.8vh) / 2));
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    line-height: 0.85em;
+    color: #ab9877;
+    font-size: 0.75em;
+    font-family: "Classic Console Neue";
 }
 
 #site-footer {

@@ -12,10 +12,12 @@ import stock_2 from "../img/stock_demo/2.gif";
 
 // globals
 const img_temp = createHTMLElement('img', '');
-const vid_temp = createHTMLElement('video', '');
+const vid_temp = createHTMLElement('video', '', {loop: true});
 
 const stock_photos = [
-    stock_0, stock_1, stock_2
+    ['Blade-Runner.gif', stock_0],
+    ['Blade-Runner-2049.gif', stock_1], 
+    ['Europeana-Collections.gif', stock_2],
 ]
 
 const OUT_HEIGHT = 35;
@@ -25,6 +27,9 @@ function createHTMLStructure() {
     const img_upload = createHTMLElement('label', '', {id: 'img-upload'});
     const img_upload_input = createHTMLElement('input', '', {class: 'upload', type: 'file'});
     const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF \\ MP4', {class: 'prompt'});
+
+    const input_prompt = createHTMLElement('p', '', {id: 'input-prompt'});
+
     const ascii_art_showcase = createHTMLElement('div', '', {id: 'ascii-art-showcase'});
     const page_loading_prompt = createHTMLElement('p', '', {id: 'loading-prompt'});
 
@@ -40,6 +45,7 @@ function createHTMLStructure() {
 
     // append to body
     document.body.appendChild(ascii_art_showcase);
+    document.body.appendChild(input_prompt);
     document.body.appendChild(img_upload);
     document.body.appendChild(footer);
 }
@@ -201,14 +207,26 @@ function updateASCIIArtVid(videoEl) {
     };
 
 
-    VFE(videoEl, 5, frameCallback, endConditionCheckFunc);
+    VFE(videoEl, 120, frameCallback, endConditionCheckFunc);
+    videoEl.play();
+
+    return () => {
+        // stop function
+        videoEl.pause();
+        videoEnd = true;
+    }
 }
 
 function setup() {
     const img_upload = document.querySelector("#img-upload .upload");
-    const extImg = /(\.jpg|\.jpeg|\.png)$/i;
+    const extImg = /(\.jpg|\.jpeg|\.png|\.apng|\.svg|\.bmp|\.webp)$/i;
     const extGif = /(\.gif)$/i;
-    const extVid = /(\.mp4)$/i;
+    const extVid = /(\.mp4|\.webm|\.ogg)$/i;
+    const filenamePrompt = document.querySelector("#input-prompt");
+
+
+    // reset image upload
+    img_upload.value = '';
     
     let clearupFunc = null;
     const clearup = () => {
@@ -218,26 +236,34 @@ function setup() {
         clearupFunc = null;
     }
 
-    const produceOut = (fileURL, filePath=fileURL) => {
-        if (extImg.exec(filePath)) {
+    const produceOut = (fileURL, fileName=fileURL) => {
+        if (extImg.exec(fileName)) {
             clearup();
             img_temp.src = fileURL;
-        } else if (extGif.exec(filePath)) {
+            filenamePrompt.innerHTML = '&lt' + fileName + '&gt';
+        } else if (extGif.exec(fileName)) {
             clearup();
             clearupFunc = updateASCIIArtGif(fileURL);
-        } else if (extVid.exec(filePath)) {
+            filenamePrompt.innerHTML = '&lt' + fileName + '&gt';
+        } else if (extVid.exec(fileName)) {
             clearup();
             vid_temp.src = fileURL;
+            filenamePrompt.innerHTML = '&lt' + fileName + '&gt';
         } else {
             img_upload.value = '';
+            const old_prompt = filenamePrompt.innerHTML;
+            filenamePrompt.innerHTML = "format is not supported"
+            setTimeout(()=>{
+                filenamePrompt.innerHTML = old_prompt;
+            }, 1500);
         }
     }
 
     // upload image, display image
     img_upload.addEventListener("change", (e) => {
-        const filePath = img_upload.value; 
         const fileURL =  URL.createObjectURL(e.target.files[0]);
-        produceOut(fileURL, filePath);
+        const fileName = e.target.files[0].name;
+        produceOut(fileURL, fileName);
     }, false);
 
     // when new image shows, get ascii
@@ -246,12 +272,12 @@ function setup() {
     });
 
     vid_temp.addEventListener('loadeddata', (e) => {
-        updateASCIIArtVid(vid_temp);
+        clearupFunc = updateASCIIArtVid(vid_temp);
     });
 
     // initial stock photo
-    const stock_url = stock_photos[Math.floor(Math.random() * stock_photos.length)];
-    produceOut(stock_url);
+    const stock_img = stock_photos[Math.floor(Math.random() * stock_photos.length)];
+    produceOut(stock_img[1], stock_img[0]);
 }
 
 function main() {

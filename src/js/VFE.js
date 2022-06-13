@@ -18,13 +18,17 @@
         frameCallback = () => {},                   // callback after each frame is extracted, pass the frame
         endConditionCheckFunc = () => {},           // callback before a frame is extracted
     ) {
+
+        canvas_temp.width = videoEl.videoWidth;
+        canvas_temp.height = videoEl.videoHeight;
+
         const extractFrame = () => {
             if (!endConditionCheckFunc()) {
                 const begin = Date.now();
 
                 // get image data
-                canvas_temp_ctx.drawImage(videoEl);
-                const imageData = canvas_temp_ctx.getImageData(0,0,canvas_temp.width, canvas_temp.height);
+                canvas_temp_ctx.drawImage(videoEl,0,0,videoEl.videoWidth,videoEl.videoHeight);
+                const imageData = canvas_temp_ctx.getImageData(0,0,videoEl.videoWidth, videoEl.videoHeight);
                 
                 // return frame
                 new Promise(() => {
