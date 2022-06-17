@@ -1,104 +1,111 @@
-#ascii-art-showcase {
+#loading-prompt {
+    visibility: hidden;
+    font-family: "Classic Console Neue";
+    color: #ab9877;
     position: fixed;
-    top: 40%;
+    width: fit-content;
+    top: 50%;
     left: 50%;
-    width: 92.5%;
     transform: translate(-50%, -50%);
-    height: calc(38 * 1.8vh);
-    overflow: hidden;
-
-    #loading-prompt {
-        font-family: "Classic Console Neue";
-        color: #ab9877;
-        position: relative;
-        width: fit-content;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 0.75em;
-        line-height: 0.75em;
-    }
-
-    .art-container {
-        position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .row {
-        width: fit-content;
-        position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        vertical-align: center;
-
-        line-height: 1.8vh;
-        margin: 0;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    .char {
-        display: inline-block;
-        height: 1vh;
-        line-height: 1vh;
-        width: 1vh;
-        font-family: "Classic Console Neue";
-    }
+    font-size: 1em;
+    line-height: 1em;
+    white-space: nowrap;
 }
 
-#img-upload {
-    position: fixed;
-    bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.6725);
-    left: 50%;
-    transform: translate(-50%, 50%);
-    height: 5vh;
-    text-align: center;
-    color: #ab9877;
-    cursor: pointer;
-    font-size: 1.5em;
-    
-    .prompt {
-        margin: 0;
-        position: relative;
-        top: 50%;
+#app-container {
+    visibility: hidden;
+
+    #ascii-art-showcase {
+        position: fixed;
+        top: 40%;
+        left: 50%;
+        width: 92.5%;
+        transform: translate(-50%, -50%);
+        height: calc(38 * 1.8vh);
+        overflow: hidden;
+
+        .art-container {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .row {
+            width: fit-content;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            vertical-align: center;
+
+            line-height: 1.8vh;
+            margin: 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .char {
+            display: inline-block;
+            height: 1vh;
+            line-height: 1vh;
+            width: 1vh;
+            font-family: "Classic Console Neue";
+        }
+    }
+
+    #img-upload {
+        position: fixed;
+        bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.6725);
+        left: 50%;
+        transform: translate(-50%, 50%);
+        height: 5vh;
+        text-align: center;
+        color: #ab9877;
+        cursor: pointer;
+        font-size: 1.5em;
+        
+        .prompt {
+            margin: 0;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: "Classic Console Neue";
+            white-space: nowrap;
+            line-height: 1em;
+        }
+        .upload {
+            display: none;
+        }    
+    }
+
+    #input-prompt {
+        position: fixed;
+        top: calc((40% + (38 * 1.8vh) / 2));
         left: 50%;
         transform: translate(-50%, -50%);
-        font-family: "Classic Console Neue";
         white-space: nowrap;
-        line-height: 1em;
+        line-height: 0.85em;
+        color: #ab9877;
+        font-size: 0.75em;
+        font-family: "Classic Console Neue";
     }
-    .upload {
-        display: none;
+
+    #site-footer {
+        .info {
+            color: #ab9877;
+            font-size: 0.75em;
+            position: fixed;
+            text-align: center;
+            bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.3);
+            left: 50%;
+            transform: translate(-50%, 50%);
+            font-family: "Classic Console Neue";
+            line-height: 0.85em;
+            white-space: nowrap;
+        }
     }    
 }
 
-#input-prompt {
-    position: fixed;
-    top: calc((40% + (38 * 1.8vh) / 2));
-    left: 50%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-    line-height: 0.85em;
-    color: #ab9877;
-    font-size: 0.75em;
-    font-family: "Classic Console Neue";
-}
-
-#site-footer {
-    .info {
-        color: #ab9877;
-        font-size: 0.75em;
-        position: fixed;
-        text-align: center;
-        bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.3);
-        left: 50%;
-        transform: translate(-50%, 50%);
-        font-family: "Classic Console Neue";
-        line-height: 0.85em;
-        white-space: nowrap;
-    }
-}

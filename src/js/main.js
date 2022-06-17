@@ -8,7 +8,6 @@ import "../style/style.scss";
 // webpack load stock photos
 import stock_0 from "../img/stock_demo/0.gif";
 import stock_1 from "../img/stock_demo/1.gif";
-import stock_2 from "../img/stock_demo/2.gif";
 
 // globals
 const img_temp = createHTMLElement('img', '');
@@ -16,38 +15,41 @@ const vid_temp = createHTMLElement('video', '', {loop: true});
 
 const stock_photos = [
     ['Blade-Runner.gif', stock_0],
-    ['Blade-Runner-2049.gif', stock_1], 
-    ['Europeana-Collections.gif', stock_2],
+    ['Blade-Runner-2049.gif', stock_1]
 ]
 
 const OUT_HEIGHT = 35;
+let SUPPORT_VIDEO;
 
 function createHTMLStructure() {
 
+    const app_container = createHTMLElement('div', '', {id: 'app-container'});
+
     const img_upload = createHTMLElement('label', '', {id: 'img-upload'});
     const img_upload_input = createHTMLElement('input', '', {class: 'upload', type: 'file'});
-    const img_upload_prompt = createHTMLElement('p', 'UPLOAD<br>JPG \\ PNG \\ GIF \\ MP4', {class: 'prompt'});
-
+    const img_upload_prompt = createHTMLElement('p', (SUPPORT_VIDEO) ? 'UPLOAD<br>JPG \\ PNG \\ GIF \\ MP4' : 'UPLOAD<br>JPG \\ PNG \\ GIF', {class: 'prompt'});
+    
     const input_prompt = createHTMLElement('p', '', {id: 'input-prompt'});
 
     const ascii_art_showcase = createHTMLElement('div', '', {id: 'ascii-art-showcase'});
-    const page_loading_prompt = createHTMLElement('p', '', {id: 'loading-prompt'});
 
     const footer = createHTMLElement('footer', '', {id: 'site-footer'});
     const footer_info = createHTMLElement('p', 'Aghnu\'s ASCII Art Generator<br>by Gengyuan Huang<br><a target="_blank" href="https://www.aghnu.me">© 2022 AGHNU.ME</a>', {class: 'info'});
 
     footer.appendChild(footer_info);
 
-    ascii_art_showcase.appendChild(page_loading_prompt);
-
     img_upload.appendChild(img_upload_prompt);
     img_upload.appendChild(img_upload_input);
 
     // append to body
-    document.body.appendChild(ascii_art_showcase);
-    document.body.appendChild(input_prompt);
-    document.body.appendChild(img_upload);
-    document.body.appendChild(footer);
+    app_container.appendChild(ascii_art_showcase);
+    app_container.appendChild(input_prompt);
+    app_container.appendChild(img_upload);
+    app_container.appendChild(footer);
+
+    document.body.appendChild(app_container);
+
+    return app_container;
 }
 
 function updateShowcaseContainer(artArray) {
@@ -207,7 +209,7 @@ function updateASCIIArtVid(videoEl) {
     };
 
 
-    VFE(videoEl, 120, frameCallback, endConditionCheckFunc);
+    VFE.extract(videoEl, 120, frameCallback, endConditionCheckFunc);
     videoEl.play();
 
     return () => {
@@ -223,7 +225,6 @@ function setup() {
     const extGif = /(\.gif)$/i;
     const extVid = /(\.mp4|\.webm|\.ogg)$/i;
     const filenamePrompt = document.querySelector("#input-prompt");
-
 
     // reset image upload
     img_upload.value = '';
@@ -246,13 +247,22 @@ function setup() {
             clearupFunc = updateASCIIArtGif(fileURL);
             filenamePrompt.innerHTML = '&lt' + fileName + '&gt';
         } else if (extVid.exec(fileName)) {
-            clearup();
-            vid_temp.src = fileURL;
-            filenamePrompt.innerHTML = '&lt' + fileName + '&gt';
+            if (SUPPORT_VIDEO) {
+                clearup();
+                vid_temp.src = fileURL;
+                filenamePrompt.innerHTML = '&lt' + fileName + '&gt';                
+            } else {
+                img_upload.value = '';
+                const old_prompt = filenamePrompt.innerHTML;
+                filenamePrompt.innerHTML = "browser doesn't support video convertion";
+                setTimeout(()=>{
+                    filenamePrompt.innerHTML = old_prompt;
+                }, 1500);
+            }
         } else {
             img_upload.value = '';
             const old_prompt = filenamePrompt.innerHTML;
-            filenamePrompt.innerHTML = "format is not supported"
+            filenamePrompt.innerHTML = "format is not supported";
             setTimeout(()=>{
                 filenamePrompt.innerHTML = old_prompt;
             }, 1500);
@@ -272,7 +282,9 @@ function setup() {
     });
 
     vid_temp.addEventListener('loadeddata', (e) => {
-        clearupFunc = updateASCIIArtVid(vid_temp);
+        if (vid_temp.readyState >= 2) {
+            clearupFunc = updateASCIIArtVid(vid_temp);
+        }
     });
 
     // initial stock photo
@@ -281,45 +293,69 @@ function setup() {
 }
 
 function main() {
+
     window.addEventListener('load', () => {
-        // init structure
-        createHTMLStructure();
+        const loading_prompt = createHTMLElement('p', '', {id: 'loading-prompt'});
+        const opencvScript = createHTMLElement('script', '', {src: 'https://www.aghnu.me/static/js/opencv.js', async: true});
 
-        // include opencv
-        const opencvScript = createHTMLElement('script', '', {
-            src: 'https://www.aghnu.me/static/js/opencv.js',
-            // src: 'https://docs.opencv.org/4.5.0/opencv.js',
-            async: true
-        });
+        document.body.appendChild(loading_prompt);
+        document.head.appendChild(opencvScript);
 
-        const loading_prompt = document.querySelector('#loading-prompt');
+        let timeInterval;
+        let str_idx = 0;
         const loading_prompt_str = [
             'Webpage is loading',
             'Webpage is loading.',
             'Webpage is loading..',
             'Webpage is loading...',
-        ]
-        let timeInterval;
-        let str_idx = 0;
+        ];
 
+        loading_prompt.style.visibility = 'visible';
         timeInterval = setInterval(() => {
             loading_prompt.innerHTML = loading_prompt_str[str_idx];
             str_idx = (str_idx + 1) % loading_prompt_str.length;
         }, 500);
 
-        document.head.appendChild(opencvScript);
+        const start = () => {
+            const run = () => {
+                clearInterval(timeInterval);
+                createHTMLStructure().style.visibility = 'visible';
+                loading_prompt.style.visibility = 'hidden';    
+                setup();                    
+            }
+
+            VFE.checkSupport(()=>{
+                SUPPORT_VIDEO = true;
+                run();
+            }, () => {
+                SUPPORT_VIDEO = false;
+                run();
+            }, (frame) => {
+                const ASCIIArtArray = aag(frame.data, 1, true);
+                if (ASCIIArtArray.length !== 0) {
+                    if (ASCIIArtArray[0][0].rgba[0] === 254) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            });
+        }
+        
         opencvScript.addEventListener('load', () => {
             setTimeout(() => {
-                clearInterval(timeInterval);
-                loading_prompt.style.display = 'none';
                 if (cv.getBuildInformation) {
-                    setup();
+                    start();
                 } else {
-                    cv['onRuntimeInitialized'] = setup;
+                    cv['onRuntimeInitialized'] = start;
                 }
             }, loading_prompt_str.length * 500);
         });
     })
 }
+
+
 
 main();
