@@ -61,7 +61,7 @@
                 if (vid_test.readyState >= 2) {
                     VFE.extract(vid_test, 120, (frame) => {
                         end = true;
-                        if (checkingFunc) {
+                        if (checkingFunc()) {
                             onSuccess();
                         } else {
                             onFailure();
