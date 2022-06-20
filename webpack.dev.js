@@ -6,9 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
-    devServer: {
-        static: './site',
-    },
 
     output: {
         filename: '[name].bundle.js',
@@ -17,8 +14,12 @@ module.exports = merge(common, {
   
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Aghnu's ASCII Art Generator",
-            filename: 'index.html'
+            filename: 'index.html',
+            template: './src/template/index.html'
         })
     ],
+
+    devServer: {
+        static: './site',
+    },
 });
