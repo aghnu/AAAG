@@ -20,7 +20,7 @@ const stock_photos = [
     ['WNFA-Heart.gif', stock_2]
 ]
 
-const OUT_HEIGHT = 30;
+const OUT_HEIGHT = 35;
 let SUPPORT_VIDEO;
 
 function createHTMLStructure() {
