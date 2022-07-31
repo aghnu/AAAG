@@ -1,3 +1,4 @@
+
 #noscript-prompt {
     position: fixed;
     top: 50%;
@@ -15,8 +16,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1em;
-    line-height: 1em;
+    font-size: 2.2em;
+    line-height: 2.2em;
     white-space: nowrap;
 }
 
@@ -29,7 +30,7 @@
         left: 50%;
         width: 92.5%;
         transform: translate(-50%, -50%);
-        height: calc(38 * 1.8vh);
+        height: calc(38 * 1.8 * #{$site-size-unit});
         overflow: hidden;
 
         .art-container {
@@ -48,7 +49,7 @@
             text-align: center;
             vertical-align: center;
 
-            line-height: 1.8vh;
+            line-height: 1em;
             margin: 0;
             overflow: hidden;
             white-space: nowrap;
@@ -56,23 +57,24 @@
 
         .char {
             display: inline-block;
-            height: 1vh;
-            line-height: 1vh;
-            width: 1vh;
+            font-size: 2.2em;
+            line-height: 1em;
+            height: $site-size-unit;
+            width: $site-size-unit;
             font-family: "Classic Console Neue";
         }
     }
 
     #img-upload {
         position: fixed;
-        top: calc((40% + (38 * 1.8vh) / 2) + ((100% - (40% + (38 * 1.8vh) / 2)) * 0.3275));
+        top: calc((42.5% + (38 * 1.8 * #{$site-size-unit}) / 2) + ((100% - (40% + (38 * 1.8 * #{$site-size-unit}) / 2)) * 0.3275));
         left: 50%;
         transform: translate(-50%, -50%);
-        height: 5vh;
+        height: calc(5 * #{$site-size-unit});
         text-align: center;
         color: #ab9877;
         cursor: pointer;
-        font-size: 1.6em;
+        font-size: 3.52em;
         
         .prompt {
             margin: 0;
@@ -91,23 +93,23 @@
 
     #input-prompt {
         position: fixed;
-        top: calc((40% + (38 * 1.8vh) / 2));
+        top: calc((45% + (38 * 1.8 * #{$site-size-unit}) / 2));
         left: 50%;
         transform: translate(-50%, -50%);
         white-space: nowrap;
         color: #ab9877;
-        font-size: 0.75em;
+        font-size: 1.65em;
         font-family: "Classic Console Neue";
     }
 
     #site-footer {
         .info {
             color: #ab9877;
-            font-size: 0.75em;
+            font-size: 1.65em;
             position: fixed;
             text-align: center;
-            // bottom: calc((100% - (40% + (38 * 1.8vh) / 2)) * 0.3);
-            top: calc((40% + (38 * 1.8vh) / 2) + ((100% - (40% + (38 * 1.8vh) / 2)) * 0.7));
+            // bottom: calc((100% - (40% + (38 * 1.8 * #{$site-size-unit}) / 2)) * 0.3);
+            top: calc((40% + (38 * 1.8 * #{$site-size-unit}) / 2) + ((100% - (40% + (38 * 1.8 * #{$site-size-unit}) / 2)) * 0.7));
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: "Classic Console Neue";

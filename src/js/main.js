@@ -8,6 +8,7 @@ import "../style/style.scss";
 // webpack load stock photos
 import stock_0 from "../img/stock_demo/0.gif";
 import stock_1 from "../img/stock_demo/1.gif";
+import stock_2 from "../img/stock_demo/2.gif";
 
 // globals
 const img_temp = createHTMLElement('img', '');
@@ -15,10 +16,11 @@ const vid_temp = createHTMLElement('video', '', {loop: true});
 
 const stock_photos = [
     ['Blade-Runner.gif', stock_0],
-    ['Blade-Runner-2049.gif', stock_1]
+    ['Blade-Runner-2049.gif', stock_1],
+    ['WNFA-Heart.gif', stock_2]
 ]
 
-const OUT_HEIGHT = 35;
+const OUT_HEIGHT = 30;
 let SUPPORT_VIDEO;
 
 function createHTMLStructure() {
